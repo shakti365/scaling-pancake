@@ -41,7 +41,7 @@ Let’s break down each term to understand what attention is trying to achieve.
 
 The first term $QK^T$ is a dot-product between the query and key. The dot-product tells us how close two vectors are in the geometric space - higher the value, closer they are. Intuitively you would want the queries which match with the right key to be close together 
 
-![dot-product](/images/dot-product.png)
+![dot-product](images/dot-product.png)
 
 NOTE: assume that $k$ in the image is same as $d_k$
 
@@ -53,13 +53,13 @@ Now sometimes when you do dot-product of vectors which are larger in size, you w
 
 This is passed through softmax function to increase the higher values and keep it in a range of 0 to 1.
 
-![softmax](/images/softmax.png)
+![softmax](images/softmax.png)
 
 **Dot-product with Value:**
 
 The final term is multiplied with the **Value** vector to give us the output vector. Think about this operation as the final look-up the database.
 
-![output](/images/output.png)
+![output](images/output.png)
 
  
 
@@ -71,13 +71,13 @@ The first part of multi-head attention is same as the scaled dot-product attenti
 
 In order to facilitate this we take the query, key and value vectors and linearly projected them across different channels.
 
-![linear-proj](/images/linear-proj.png)
+![linear-proj](images/linear-proj.png)
 
-Then we perform the scaled dot-product attention over these projections. ![multi-head-attention-1](/images/multi-head-attention-1.png)
+Then we perform the scaled dot-product attention over these projections. ![multi-head-attention-1](images/multi-head-attention-1.png)
 
 The output from this step is concatenated across these channels and then again linearly projected into the output (to get the desired shape of output vector).
 
-![multi-head-attention-2](/images/multi-head-attention-2.png)
+![multi-head-attention-2](images/multi-head-attention-2.png)
 
 
 
@@ -105,7 +105,7 @@ $$
 
 
 
-![](/images/pos-enc.png)
+![](images/pos-enc.png)
 
 When you add these positional encoding vectors to the input, each input is then linearly translated by this sinusoidal function which is unique for each position. This helps the model to preserve information about relative position of each token. The encodings are applied right after input and output embeddings in both encoder and decoder.
 
