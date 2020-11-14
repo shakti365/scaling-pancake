@@ -20,9 +20,11 @@ The fundamental building block for this architecture is the multi-head attention
 ### Scaled Dot-Product Attention:
 
 Attention is described as mapping a ***query*** and a set of ***key*** - ***value*** pairs to an output.
+
 $$
 Attention(Q,K,V) = softmax(\frac{QK^T}{\sqrt{d_k}})V
 $$
+
 where,
 
 ​	$Q$: query
@@ -37,11 +39,11 @@ where,
 
 Let’s break down each term to understand what attention is trying to achieve.
 
-**Query and Key Dot-Product: **
+**Query and Key Dot-Product:**
 
 The first term $QK^T$ is a dot-product between the query and key. The dot-product tells us how close two vectors are in the geometric space - higher the value, closer they are. Intuitively you would want the queries which match with the right key to be close together 
 
-![dot-product](images/dot-product.png)
+![dot-product]({{site.baseurl}}/images/posts/attention/dot-product.png)
 
 NOTE: assume that $k$ in the image is same as $d_k$
 
@@ -53,13 +55,13 @@ Now sometimes when you do dot-product of vectors which are larger in size, you w
 
 This is passed through softmax function to increase the higher values and keep it in a range of 0 to 1.
 
-![softmax](images/softmax.png)
+![softmax]({{site.baseurl}}/images/posts/attention/softmax.png)
 
 **Dot-product with Value:**
 
 The final term is multiplied with the **Value** vector to give us the output vector. Think about this operation as the final look-up the database.
 
-![output](images/output.png)
+![output]({{site.baseurl}}/images/posts/attention/output.png)
 
  
 
@@ -71,13 +73,13 @@ The first part of multi-head attention is same as the scaled dot-product attenti
 
 In order to facilitate this we take the query, key and value vectors and linearly projected them across different channels.
 
-![linear-proj](images/linear-proj.png)
+![linear-proj]({{site.baseurl}}/images/posts/attention/linear-proj.png)
 
-Then we perform the scaled dot-product attention over these projections. ![multi-head-attention-1](images/multi-head-attention-1.png)
+Then we perform the scaled dot-product attention over these projections. ![multi-head-attention-1]({{site.baseurl}}/images/posts/attention/multi-head-attention-1.png)
 
 The output from this step is concatenated across these channels and then again linearly projected into the output (to get the desired shape of output vector).
 
-![multi-head-attention-2](images/multi-head-attention-2.png)
+![multi-head-attention-2]({{site.baseurl}}/images/posts/attention/multi-head-attention-2.png)
 
 
 
@@ -94,18 +96,20 @@ The paper proposes to add positional encoding in order to give some information 
 In order to do so we encode each position of the token with a different sinusoidal function. Imagine there are 4 different $d$ dimensional tokens, so we create 4 positional encoding vectors with same dimension $d$. The values of these vectors are given as follows:
 
 For every even dimension of the vector, encode with a sin function 
+
 $$
 PE[::2] = \sin{\frac{pos}{10000^{range(0,d,2) / d}}}
 $$
 
 For every odd dimension of the vector, encode with a cos function 
+
 $$
 PE[::2] = \cos{\frac{pos}{10000^{range(0,d,2) / d}}}
 $$
 
 
 
-![](images/pos-enc.png)
+![]({{site.baseurl}}/images/posts/attention/pos-enc.png)
 
 When you add these positional encoding vectors to the input, each input is then linearly translated by this sinusoidal function which is unique for each position. This helps the model to preserve information about relative position of each token. The encodings are applied right after input and output embeddings in both encoder and decoder.
 
@@ -114,6 +118,7 @@ When you add these positional encoding vectors to the input, each input is then 
 #### Position-wise Feed-Forward Network:
 
 In both the encoder and decoder, they also have a fully-connected network with relu activation right after the multi-head attention. These transformation use the same parameter for all the positions but they differ for different layers.
+
 $$
 z_1 = xW_1+b_1\\
 a_1 = \max(0, z_1)\\ 
