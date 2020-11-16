@@ -1,1 +1,1 @@
-Sitemap: https://shakti.dev/sitemap.xml
+Sitemap: https://shakti.dev/scaling-pancake/sitemap.xml

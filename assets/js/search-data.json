@@ -10,7 +10,7 @@
       "page1": {
           "title": "About Me",
           "content": "This website is powered by fastpages 1. . a blogging platform that natively supports Jupyter notebooks in addition to other formats. &#8617; . |",
-          "url": "https://shakti.dev/about/",
+          "url": "https://shakti.dev/scaling-pancake/about/",
           "relUrl": "/about/",
           "date": ""
       }
@@ -42,7 +42,7 @@
       ,"page10": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
-          "url": "https://shakti.dev/robots.txt",
+          "url": "https://shakti.dev/scaling-pancake/robots.txt",
           "relUrl": "/robots.txt",
           "date": ""
       }
