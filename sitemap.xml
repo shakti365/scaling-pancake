@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://shakti.dev/scaling-pancake/attention/2020/07/20/attention.html</loc>
+<loc>https://shakti.dev/attention/2020/07/20/attention.html</loc>
 <lastmod>2020-07-20T00:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://shakti.dev/scaling-pancake/about/</loc>
+<loc>https://shakti.dev/about/</loc>
 </url>
 <url>
-<loc>https://shakti.dev/scaling-pancake/</loc>
+<loc>https://shakti.dev/</loc>
 </url>
 <url>
-<loc>https://shakti.dev/scaling-pancake/search/</loc>
+<loc>https://shakti.dev/search/</loc>
 </url>
 <url>
-<loc>https://shakti.dev/scaling-pancake/categories/</loc>
+<loc>https://shakti.dev/categories/</loc>
 </url>
 </urlset>
