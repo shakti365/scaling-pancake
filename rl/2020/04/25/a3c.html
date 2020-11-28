@@ -4,17 +4,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>About Me | Shivam Shakti</title>
+<title>Paper Notes: Asynchronous Advanatage Actor Critic (A3C) | Shivam Shakti</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="About Me" />
+<meta property="og:title" content="Paper Notes: Asynchronous Advanatage Actor Critic (A3C)" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A window to my personal musings." />
-<meta property="og:description" content="A window to my personal musings." />
-<link rel="canonical" href="https://shakti.dev/about/" />
-<meta property="og:url" content="https://shakti.dev/about/" />
+<meta name="description" content="Notes on A3C" />
+<meta property="og:description" content="Notes on A3C" />
+<link rel="canonical" href="https://shakti.dev/rl/2020/04/25/a3c.html" />
+<meta property="og:url" content="https://shakti.dev/rl/2020/04/25/a3c.html" />
 <meta property="og:site_name" content="Shivam Shakti" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-25T00:00:00-05:00" />
 <script type="application/ld+json">
-{"url":"https://shakti.dev/about/","@type":"WebSite","headline":"About Me","name":"Shivam Shakti","description":"A window to my personal musings.","@context":"https://schema.org"}</script>
+{"url":"https://shakti.dev/rl/2020/04/25/a3c.html","@type":"BlogPosting","headline":"Paper Notes: Asynchronous Advanatage Actor Critic (A3C)","dateModified":"2020-04-25T00:00:00-05:00","datePublished":"2020-04-25T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://shakti.dev/rl/2020/04/25/a3c.html"},"description":"Notes on A3C","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://shakti.dev/feed.xml" title="Shivam Shakti" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -88,30 +90,115 @@ window.onload = wrap_img;
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <article class="post">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">About Me</h1>
-  </header>
+    <h1 class="post-title p-name" itemprop="name headline">Paper Notes: Asynchronous Advanatage Actor Critic (A3C)</h1><p class="page-description">Notes on A3C</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-25T00:00:00-05:00" itemprop="datePublished">
+        Apr 25, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
 
-  <div class="post-content">
-    <p><img src="/images/profile.png" alt="" /></p>
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#rl">rl</a>
+        
+      
+      </p>
+    
 
-<p>Hello World! I am a ML Engineer working on finding solutions with Machine Learning for real-world problems.
-My mission is to solve learning to act problems (like planning and optimization) using AI.</p>
+    </header>
 
-<p>I am interested in key topics related to Deep Reinforcement Learning, Evolutionary Algortihms 
-and Causal Inference. I have also done some work in domains like Computer Vision and NLP.</p>
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="asynchronous-methods-for-deep-reinforcement-learning">Asynchronous Methods for Deep Reinforcement Learning</h2>
 
-<p>At times I like building things using web technologies like Tornado and NodeJS. Also, I know my way around data processing systems
-like Spark and Kafka.</p>
+<h3 id="contributions">Contributions:</h3>
 
-<p>You can find me lurking around Reddit, HN and Twitter. And when not doing that, listening to podcasts, cooking or reading Star Wars Wookieepedia, I am.</p>
+<ul>
+  <li>Use of asynchronous actors and parameter updated using Hogwild! strategy</li>
+  <li>Parallel running learners can do more exploration and updates are less likely to be correlated</li>
+</ul>
 
-  </div>
+<h3 id="algorithm">Algorithm:</h3>
 
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Policy: $\pi(a_t</td>
+          <td>s_t;\theta)$</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Value function: $V(s_t;\theta_v)$</li>
+  <li>Policy and value function share the same parameter except softmax output for policy and linear output for value function</li>
+  <li>Adding entropy of the policy to the objective function is suggested to improve exploration; this later on becomes the soft actor-critic algorithm !?!</li>
+  <li>Objective functions:
+    <ul>
+      <li>SGD with momentum</li>
+      <li>RMSProp without shared statistics</li>
+      <li>RMSProp with shared statistics</li>
+    </ul>
+  </li>
+  <li>Algorithm in details:
+    <ul>
+      <li>Initialize global shared parameters: $\theta$ and $\theta_v$</li>
+      <li>Initialize global shared counter: $T=0$</li>
+      <li>Initialize thread step counter: $t \leftarrow 1$</li>
+      <li>Repeat for every thread
+        <ul>
+          <li>Initialize gradients: $d\theta \leftarrow 0$ and $d\theta \leftarrow 0$</li>
+          <li>Synchronize thread parameters with global parameters: $\theta^\prime = \theta$ and $\theta_v^\prime = \theta_v$</li>
+          <li>t_start = t</li>
+          <li>Get current state: $s_t$</li>
+          <li>repeat:
+            <ul>
+              <li>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Perform action from policy: $a_t = \pi(a_t</td>
+                      <td>s_t;\theta)$</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </li>
+              <li>Store reward and next state: $r_t$ and $s_{t+1}$</li>
+              <li>$t \leftarrow t + 1$</li>
+            </ul>
+          </li>
+          <li>until terminal state</li>
+          <li>Initialize $R=0$</li>
+          <li>for $i$ in ${t-1,… t_{start}}$:
+            <ul>
+              <li>$R = r_i + \gamma R$</li>
+              <li></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="shakti365/scaling-pancake"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/rl/2020/04/25/a3c.html" hidden></a>
 </article>
-
       </div>
     </main><footer class="site-footer h-card">
   <data class="u-url" href="/"></data>
