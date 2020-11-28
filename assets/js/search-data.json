@@ -16,6 +16,8 @@
   
     
   
+    
+  
 
   
   
@@ -36,7 +38,7 @@
   
       ,"page3": {
           "title": "Projects",
-          "content": "Signature Detection System .",
+          "content": "One-Shot Signature Recognition One-shot offline signature verification usingSiamese CNNandtriplet loss. Users are able to upload a positive sample of their signature which can be used to verify if a newsamples matches with original one or not. . RL Algorithms from Scatch Implementation of algorithms like DQN, REINFORCE, A3C, PPO and SAC from scratch by going over research papers. .",
           "url": "https://shakti.dev/projects/",
           "relUrl": "/projects/",
           "date": ""
