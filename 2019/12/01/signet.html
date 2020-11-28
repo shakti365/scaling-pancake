@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>One-Shot Signature Recognition Using Siamese Networks | Shivam Shakti</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="One-Shot Signature Recognition Using Siamese Networks" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Solution Design" />
+<meta property="og:description" content="Solution Design" />
+<link rel="canonical" href="https://shakti.dev/2019/12/01/signet.html" />
+<meta property="og:url" content="https://shakti.dev/2019/12/01/signet.html" />
+<meta property="og:site_name" content="Shivam Shakti" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-12-01T00:00:00-06:00" />
+<script type="application/ld+json">
+{"url":"https://shakti.dev/2019/12/01/signet.html","@type":"BlogPosting","headline":"One-Shot Signature Recognition Using Siamese Networks","dateModified":"2019-12-01T00:00:00-06:00","datePublished":"2019-12-01T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://shakti.dev/2019/12/01/signet.html"},"description":"Solution Design","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://shakti.dev/feed.xml" title="Shivam Shakti" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-165330056-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Shivam Shakti</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/projects/">Projects</a><a class="page-link" href="/research/">Research</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">One-Shot Signature Recognition Using Siamese Networks</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-12-01T00:00:00-06:00" itemprop="datePublished">
+        Dec 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="solution-design">Solution Design</h2>
+
+<h3 id="definitions">Definitions:</h3>
+
+<ul>
+  <li><strong>System</strong>: Herein referred to the signature recognition system to be built</li>
+  <li><strong>User</strong>: entity who will use this system for signature recognition</li>
+  <li><strong>Customer</strong>: entity whose signatures are to be verified</li>
+  <li><strong>Signature</strong>: hand written signature of a Customer</li>
+  <li><strong>Match Score</strong>: A probability value output from the system in range [0, 1], where 1 indicates match and 0 indicates mis-match of signature</li>
+</ul>
+
+<h3 id="description-of-the-solution">Description of the Solution:</h3>
+
+<p>This solution is intended to provide its users with a Signature Recognition system. The user can upload a new customer’s signature in the system corresponding to its UUID. Then, a user can upload signature to match the one previously stored in database for the customer. To this, system would be able to provide match score.</p>
+
+<h4 id="inputs">Inputs:</h4>
+
+<ul>
+  <li><strong>customer_id</strong>: UUID of customer whose signature is to be matched</li>
+  <li><strong>signature</strong>: image of the handwritten signature of a customer</li>
+</ul>
+
+<h4 id="outputs">Outputs:</h4>
+
+<ul>
+  <li><strong>match_score</strong>: predicted probabillity of a match</li>
+</ul>
+
+<h4 id="components">Components:</h4>
+
+<ul>
+  <li><strong>Frontend</strong>
+    <ul>
+      <li>Dashboard to perform actions</li>
+    </ul>
+  </li>
+  <li><strong>Backend</strong>
+    <ul>
+      <li>APIs for storing genuine signature and matching</li>
+      <li>Manage control flow and communications from different modules</li>
+    </ul>
+  </li>
+  <li><strong>Database</strong>
+    <ul>
+      <li>Store processed data of customer signatures</li>
+    </ul>
+  </li>
+  <li><strong>Model Server</strong>
+    <ul>
+      <li>Serve tensorflow models over a REST API</li>
+    </ul>
+  </li>
+  <li><strong>Training module</strong>
+    <ul>
+      <li>Relevant functions for training and tuning models</li>
+    </ul>
+  </li>
+  <li><strong>Inference module</strong>
+    <ul>
+      <li>Input and output management from model server</li>
+    </ul>
+  </li>
+  <li><strong>Data processing module</strong>
+    <ul>
+      <li>Clean and pre-process input data for model and storing in DB</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="activity-diagram">Activity Diagram:</h4>
+
+<p><img src="https://i.imgur.com/4kbye9S.png" alt="signature-recognition" /></p>
+
+<h2 id="tech-stack">Tech Stack</h2>
+
+<ul>
+  <li>Programming Langugage: Python</li>
+  <li>
+    <p>Frameworks:</p>
+
+    <ul>
+      <li>Tensorflow, Flask</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="algorithmsmodels">Algorithms/Models</h2>
+
+<h3 id="siamese-neural-network">Siamese Neural Network</h3>
+
+<p><img src="https://i.imgur.com/lwRkFYF.png" alt="siamese-model" /></p>
+
+<p>We will be using a Convolutional Siamese Neural Network model for signature verifications. The model architecture is proposed as SigNet [1]. This model is analogous to the SOTA models used for face verfication tasks [2]. The main goal of this model is to erradicate the task of manual feature engineering for singatures and leverage the representation learning capability of deep neural network architectures. In addition to this Siamese Networks can help in learning with less number of samples or one-shot learning. One-shot learning capability is useful in our case where we want to learn from usually one signature of a customer. Siamese Networks take in two input $x_1, x_2$ and output embeddings $s_1, s_2$ for each of the two inputs using a model parametrized by the same weights $\theta$.
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>s</mi><mn>2</mn></msub><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>x</mi><mn>2</mn></msub><mo separator="true">;</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">s_1, s_2 = f(x_1, x_2;\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span>
+These embeddings are then passed to logistic regression layer which tries to learn a distance measure in the embedding space. Learning distance measure is easier for the model than learning a classification to all the customers singature available.
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>w</mi></msub><mo>=</mo><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi>f</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mn>1</mn></msub><mo separator="true">;</mo><msub><mi>w</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mn>2</mn></msub><mo separator="true">;</mo><msub><mi>w</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">D_w = ||f(s_1;w_1) - f(s_2;w_2)||</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∣</span><span class="mord">∣</span></span></span></span>
+This model then tries to minimize a <em>contrastive loss</em> $L(s_1, s_2, y)$ which brings output embeddings of same inputs closer together. Where $y$ is the binary label indicating inputs are similar or different.
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>s</mi><mn>2</mn></msub><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mi>α</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false">)</mo><msubsup><mi>D</mi><mi>w</mi><mn>2</mn></msubsup><mo>+</mo><mi>β</mi><mi mathvariant="normal">.</mi><mi>y</mi><mi mathvariant="normal">.</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mi>m</mi><mo>−</mo><msub><mi>D</mi><mi>w</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">L(s_1, s_2, y) = \alpha(1-y)D_{w}^2 + \beta.y .max(0, m-D_w)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">L</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>
+We do not go into the details of this loss function here because we want to compare it with a different loss function. Albeit this loss function works well in most of cases but we propose to compare it against using <em>triplet loss</em> [3].</p>
+
+<h3 id="triplet-loss-function">Triplet loss function</h3>
+
+<p>The constrastive loss tries to bring embeddings of same inputs closer together. This might seem greedy in a sense that it doesn’t account for difference in inputs. Training with triplet loss function mitigates this issue, it brings similar input close together and at the same time tries to separate the inputs farther together in embedding space.</p>
+
+<p><img src="https://i.imgur.com/QyIWduV.png" alt="triplet-loss" /></p>
+
+<p>The approach that we propose here is a one-shot siamese network with triplet loss. The goal will be to train the model using data set provided in order to learn the distance measure. The model will then be served using tensorflow and flask backend for match score predictions. Our aim with this approach is to reduce the error rate to a minimum, however, we realise that it might not be possible to reach zero error rates and best use cases of AI comes only when humans can understand and work together with such system. In order to support the end users, we would also like to propose a system where end users can understand why a given match score is predicted by the model using model interpretability techniques [4, 5]. This can serve as a feedback mechanism and process for quality assurance of the system.</p>
+
+<h3 id="results">Results</h3>
+
+<p>The data set provided was split in three parts comprising 80% of train set, 10% of validatiion set and 10% as held out test set. The model was trained and on the train set using GPU runtime in colab notebooks. Hyperameter tuning was done by observing metrics like loss, accuracy, precision and recall on the validation set. Once the model achieved desired state it was tested out on the held out data set, where following results were observed.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Accuracy</td>
+      <td>0.96</td>
+    </tr>
+    <tr>
+      <td>Precision</td>
+      <td>0.925</td>
+    </tr>
+    <tr>
+      <td>Recall</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A more robust test set with noisy background image in real environment is planed and will be tested in next phase.</p>
+
+<h3 id="references">References:</h3>
+
+<ol>
+  <li>
+    <p>Dey et.al. <em>SigNet: Convolutional Siamese Network for Writer Independent Offline Signature Verification</em> https://arxiv.org/abs/1707.02131</p>
+  </li>
+  <li>
+    <p>Taigman et.al. <em>DeepFace: Closing the Gap to Human-Level Performance in Face Verification</em> https://research.fb.com/publications/deepface-closing-the-gap-to-human-level-performance-in-face-verification/</p>
+  </li>
+  <li>
+    <p>Schroff et.al. <em>FaceNet: A Unified Embedding for Face Recognition and Clustering</em> https://arxiv.org/abs/1503.03832</p>
+  </li>
+  <li>
+    <p>Shrikumar et.al. <em>Learning Important Features Through Propagating Activation Differences</em> https://arxiv.org/abs/1704.02685</p>
+  </li>
+  <li>
+    <p>Ribeiro et.al <em>“Why Should I Trust You?”: Explaining the Predictions of Any Classifier</em> https://arxiv.org/abs/1602.04938</p>
+  </li>
+</ol>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="shakti365/scaling-pancake"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/2019/12/01/signet.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>A window to my personal musings.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/shakti365" title="shakti365"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/shakti0802" title="shakti0802"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
