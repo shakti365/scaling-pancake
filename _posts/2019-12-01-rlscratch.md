@@ -7,4 +7,3 @@ hide: true
 search_exclude: true
 ---
 
-TODO: Add details
