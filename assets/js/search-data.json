@@ -33,7 +33,7 @@
   
       "page1": {
           "title": "About Me",
-          "content": ". Hello World! I am a ML Engineer working on finding solutions with Machine Learning for real-world problems. My mission is to solve learning to act problems (like planning and optimization) using AI. . I am interested in key topics related to Deep Reinforcement Learning, Evolutionary Algortihms and Causal Inference. I have also done some work in domains like Computer Vision and NLP. . At times I like building things using web technologies like Tornado and NodeJS. Also, I know my way around data processing systems like Spark and Kafka. . You can find me lurking around Reddit, HN and Twitter. And when not doing that, listening to podcasts, cooking or reading Star Wars Wookieepedia, I am. .",
+          "content": ". Hello World! I am a ML Engineer working on finding solutions with Machine Learning for real-world problems. My mission is to solve learning to act problems using AI. . Currently, I build ML products at CustomerGlu. Most of my work revolves around looking at latest research and finding a way to apply them in our product. I love engineering solutions to hard problems independent of domain, that is why I shuffle around backend and data engineering when its required. . I am interested in key topics related to Deep Reinforcement Learning, Constrained Optimization and Causal Inference. Particulary, application of Deep RL to real-world problems like robotics excites me. . Often, you will find me reading books, listening to podcasts or cooking. .",
           "url": "https://shakti.dev/about/",
           "relUrl": "/about/",
           "date": ""
@@ -46,7 +46,7 @@
   
       ,"page3": {
           "title": "Projects",
-          "content": "One-Shot Signature Recognition One-shot offline signature verification usingSiamese CNNandtriplet loss. Users are able to upload a positive sample of their signature which can be used to verify if a newsamples matches with original one or not. . RL Algorithms from Scatch Implementation of algorithms like DQN, REINFORCE, A3C, PPO and SAC from scratch by going over research papers. .",
+          "content": "One-Shot Signature Recognition . One-shot offline signature verification using Siamese CNN and triplet loss. Users are able to upload a positive sample of their signature which can be used to verify if a new sample matches with original one or not. . | RL Algorithms from Scatch . Implementation of algorithms like DQN, REINFORCE, A3C, PPO and SAC from scratch in Tensorflow and Pytorch by going over research papers. . | . For more projects checkout my GitHub repositories .",
           "url": "https://shakti.dev/projects/",
           "relUrl": "/projects/",
           "date": ""
