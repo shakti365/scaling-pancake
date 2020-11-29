@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://shakti.dev/2017/01/01/mcss.html</loc>
+<lastmod>2017-01-01T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://shakti.dev/2017/01/01/mrmr.html</loc>
+<lastmod>2017-01-01T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://shakti.dev/2017/01/01/prfcm.html</loc>
+<lastmod>2017-01-01T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://shakti.dev/2018/01/01/techdebt.html</loc>
+<lastmod>2018-01-01T00:00:00-06:00</lastmod>
+</url>
+<url>
 <loc>https://shakti.dev/2019/12/01/rlscratch.html</loc>
 <lastmod>2019-12-01T00:00:00-06:00</lastmod>
 </url>
@@ -53,5 +69,17 @@
 </url>
 <url>
 <loc>https://shakti.dev/categories/</loc>
+</url>
+<url>
+<loc>https://shakti.dev/public/papers/IDS-CSS-FS.pdf</loc>
+<lastmod>2020-11-29T04:33:13-06:00</lastmod>
+</url>
+<url>
+<loc>https://shakti.dev/public/papers/IDS-MRMR.pdf</loc>
+<lastmod>2020-11-29T04:33:13-06:00</lastmod>
+</url>
+<url>
+<loc>https://shakti.dev/public/papers/IDS-PRFCM-Clustering.pdf</loc>
+<lastmod>2020-11-29T04:33:13-06:00</lastmod>
 </url>
 </urlset>
