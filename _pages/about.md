@@ -23,10 +23,10 @@ permalink: /about/
   </tr>
 </table>
 
-Hello World! I am a ML Engineer working on finding solutions with Machine Learning for real-world problems. My mission is to solve learning to act problems using AI.
+Hello World! I am a ML Engineer working on finding solutions to real-world problems using Machine Learning.
 
-Currently, I build ML products at [CustomerGlu](https://customerglu.com). Most of my work revolves around looking at latest research and finding a way to apply them in our product. I love engineering solutions to hard problems independent of domain, that is why I shuffle around backend and data engineering when its required.
+My day job involves streamlining and scaling ML solutions at [Delivery Hero](https://www.deliveryhero.com). Previously, I was a founding team member at [CustomerGlu](https://customerglu.com) where I built ML infrastructure for SaaS products.
 
-I am interested in key topics related to Deep Reinforcement Learning, Constrained Optimization and Causal Inference. Particulary, application of Deep RL to real-world problems like robotics excites me.
+I am interested in key topics related to Deep Reinforcement Learning, Constrained Optimization and Causal Inference. Particulary, application of RL to real-world decision making excites me.
 
-Often, you will find me reading books, listening to podcasts or cooking.
+Often, you will find me taking long walks listening to podcasts.
