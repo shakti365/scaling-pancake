@@ -87,10 +87,7 @@
   
 
   
-  
-
-  
-      ,"page13": {
+      ,"page12": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://shakti.dev/robots.txt",
