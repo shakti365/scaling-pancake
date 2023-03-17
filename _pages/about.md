@@ -4,7 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-![boring human male]({{site.baseurl}}/images/profile.png)
+<img src="{{site.baseurl}}/images/profile.png" alt="boring human male" width="428" height="472">
 
 <table>
   <tr>
